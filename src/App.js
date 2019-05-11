@@ -35,23 +35,15 @@ export default class App extends React.Component {
   render() {
       const dataStyles = {
           fontSize:'20px',
-          color:'gray',
-          font:'Avant Garde'
+          color:'orange'
       }
     const filterNames = this.state.data.filter(search => {
       return (
         search.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
-        -1
+        -1 || search.cost_in_credits.indexOf(this.state.search) !==-1
       );
     });
-    const starData = this.state.data.map((starship, i) => {
-      return (
-        <List>
-          <List.Item key={i}>{i} Starship: {starship.name} Cost: {starship.cost_in_credits}</List.Item>
-          {/* <List.Item key={i}> Price: {starship.cost_in_credits}</List.Item> */}
-        </List>
-      );
-    });
+
     //search filter through data Api
     if (this.state.isLoading) {
       return <p>is Loading..</p>;
@@ -60,9 +52,6 @@ export default class App extends React.Component {
     return (
       <div>
         <Starhead />
-        <Segment style={dataStyles}>
-            {starData}
-        </Segment>
         <Container>
           <form>
             <input
@@ -73,8 +62,8 @@ export default class App extends React.Component {
           </form>
           {filterNames.map((data, i) => {
             return (
-              <List>
-                <List.Item key={i}> {data.name}</List.Item>
+              <List style={dataStyles}>
+                <List.Item key={i}> {data.name} {data.cost_in_credits}</List.Item>
               </List>
             );
           })}

@@ -1,8 +1,8 @@
 import React from 'react';
 import Starhead from './components/StarHead';
-import StarFooter from './components/StarFooter'
+import StarFooter from './components/StarFooter';
 import ReactDOM from 'react-dom';
-import { Container, List } from 'semantic-ui-react';
+import { Container, List,Segment } from 'semantic-ui-react';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -33,16 +33,24 @@ export default class App extends React.Component {
       });
   }
   render() {
-    console.log(this.state.isLoading); // working loading
-
+      const dataStyles = {
+          fontSize:'20px',
+          color:'gray',
+          font:'Avant Garde'
+      }
     const filterNames = this.state.data.filter(search => {
       return (
         search.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
         -1
       );
     });
-    const prices = this.state.data.map(starship => {
-      return <li> {starship.cost_in_credits}</li>;
+    const starData = this.state.data.map((starship, i) => {
+      return (
+        <List>
+          <List.Item key={i}>{i} Starship: {starship.name} Cost: {starship.cost_in_credits}</List.Item>
+          {/* <List.Item key={i}> Price: {starship.cost_in_credits}</List.Item> */}
+        </List>
+      );
     });
     //search filter through data Api
     if (this.state.isLoading) {
@@ -51,7 +59,10 @@ export default class App extends React.Component {
 
     return (
       <div>
-        <Starhead/>
+        <Starhead />
+        <Segment style={dataStyles}>
+            {starData}
+        </Segment>
         <Container>
           <form>
             <input
@@ -68,7 +79,7 @@ export default class App extends React.Component {
             );
           })}
         </Container>
-        <StarFooter/>
+        <StarFooter />
       </div>
     );
   }

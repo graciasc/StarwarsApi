@@ -1,14 +1,15 @@
-import React from "react";
-import Starhead from './components/StarshipHead'
-import ReactDOM from "react-dom";
-    import {Header,Segment,Container} from 'semantic-ui-react'
+import React from 'react';
+import Starhead from './components/StarHead';
+import StarFooter from './components/StarFooter'
+import ReactDOM from 'react-dom';
+import { Container, List } from 'semantic-ui-react';
 
 export default class App extends React.Component {
   constructor(props) {
     super();
     this.state = {
       data: [],
-      search: "",
+      search: '',
       isLoading: false
     };
     this.searchInput = this.searchInput.bind(this);
@@ -22,7 +23,7 @@ export default class App extends React.Component {
   async componentDidMount() {
     // this.state.isLoading = true have to set isLoading to true to Load the page
     this.setState({ isLoading: true });
-    fetch("https://swapi.co/api/starships")
+    fetch('https://swapi.co/api/starships')
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -40,6 +41,9 @@ export default class App extends React.Component {
         -1
       );
     });
+    const prices = this.state.data.map(starship => {
+      return <li> {starship.cost_in_credits}</li>;
+    });
     //search filter through data Api
     if (this.state.isLoading) {
       return <p>is Loading..</p>;
@@ -48,17 +52,27 @@ export default class App extends React.Component {
     return (
       <div>
         <Starhead/>
-        <form>
-          <input type="text" placeholder="Starships" onChange={this.searchInput} />
-        </form>
-        {filterNames.map((data, i) => {
-          return <li key={i}> {data.name}</li>;
-        })}
-
+        <Container>
+          <form>
+            <input
+              type='text'
+              placeholder='Starships'
+              onChange={this.searchInput}
+            />
+          </form>
+          {filterNames.map((data, i) => {
+            return (
+              <List>
+                <List.Item key={i}> {data.name}</List.Item>
+              </List>
+            );
+          })}
+        </Container>
+        <StarFooter/>
       </div>
     );
   }
 }
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById('root');
 ReactDOM.render(<App />, rootElement);

@@ -65,6 +65,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 
 ### `npm run build` fails to minify
 
-### Adding Semantic CSS run `npm install semantic-ui-react semantic-ui-css` 
+## Adding Semantic CSS run 
+### `npm install semantic-ui-react semantic-ui-css` 
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

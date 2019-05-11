@@ -1,38 +1,64 @@
-import React from 'react';
+import React from "react";
+import Starhead from './components/StarshipHead'
+import ReactDOM from "react-dom";
+    import {Header,Segment,Container} from 'semantic-ui-react'
 
 export default class App extends React.Component {
   constructor(props) {
     super();
     this.state = {
-      data: {},
+      data: [],
+      search: "",
       isLoading: false
     };
-  }
-  //cors error going to try just using .then().then()
- componentDidMount() {
-    this.setState({isLoading: true})
-    fetch("https://swapi.co/api/people/1")
-        .then(response => response.json())
-        .then(data => {
-            this.setState({
-                data: data,
-                isLoading:false
-            })
-        })
-//if the state isLoading changes to false then it is loaded
-// console.log(this.state.data)
+    this.searchInput = this.searchInput.bind(this);
   }
 
+  searchInput(e) {
+    this.setState({
+      search: e.target.value
+    });
+  }
+  async componentDidMount() {
+    // this.state.isLoading = true have to set isLoading to true to Load the page
+    this.setState({ isLoading: true });
+    fetch("https://swapi.co/api/starships")
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          data: data.results,
+          isLoading: false
+        });
+      });
+  }
   render() {
-      if(this.state.isLoading) { //checking for true of false for the state
-          return (
-              <h1> Loading Data...</h1>
-          )
-      }
+    console.log(this.state.isLoading); // working loading
+
+    const filterNames = this.state.data.filter(search => {
+      return (
+        search.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
+        -1
+      );
+    });
+    //search filter through data Api
+    if (this.state.isLoading) {
+      return <p>is Loading..</p>;
+    }
+
     return (
       <div>
-        <h1> {this.state.data.name}</h1>
+        <Starhead/>
+        <form>
+          <input type="text" placeholder="Starships" onChange={this.searchInput} />
+        </form>
+        {filterNames.map((data, i) => {
+          return <li key={i}> {data.name}</li>;
+        })}
+
       </div>
     );
   }
 }
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
